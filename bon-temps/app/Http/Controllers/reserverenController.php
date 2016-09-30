@@ -11,13 +11,13 @@ class reserverenController extends Controller
 {
     public function index()
     {
-    	$tafel 	= DB::table('tbl_tables')->where('visible','=','1')->first();
-    	return $this->reserveren($tafel);
+        $velden         = ['naam', 'adres', 'woonplaats','email', 'telefoon'];
+        $orderlists     = DB::table('tbl_orderlists')->get();
+        return View('page.reserveren', compact('velden', 'orderlists','veldenr'));
     }
-    public function reserveren($tafel_nr)
+    public function reserveren()
     {
-    	$velden 		= ['naam', 'adres', 'woonplaats','email', 'telefoon'];
-    	$orderlists 	= DB::table('tbl_orderlists')->get();
-       	return View('page.reserveren', compact('velden', 'orderlists','veldenr', 'tafel_nr'));
+    	$tafel     = DB::table('tbl_tables')->where('visible','=','1')->first();
+        return $this->reserveren($tafel);
     }
 }

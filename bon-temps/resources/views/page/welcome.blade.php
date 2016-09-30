@@ -19,7 +19,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Bon temps
+                    Bon temp's
                 </div>
 
                 <div class="links">

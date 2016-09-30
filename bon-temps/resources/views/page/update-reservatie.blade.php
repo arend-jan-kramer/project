@@ -19,31 +19,34 @@
 </div>
 @endif
 
-	<form action="{{ action('dataController@save') }}" method="post">
+	<form action="{{ action('dataController@update') }}" method="post">
+		<input type="hidden" name="_token" value="{{Session::token()}}">
 		<div class="panel panel-primary">
 			<div class="panel-heading">Update</div>
 			<div class="panel-body">
 				<div class="panel panel-group">
 					<label>Naam</label>
-					<input type="text" name="naam" class="form-control">
+					<input type="hidden" name="id" value="{{ $row->id }}">
+					<input type="text" value="{{ $row->name }}" name="naam" class="form-control">
 				</div>
 				<div class="panel panel-group">
 					<label>Adres</label>
-					<input type="text" name="adres" class="form-control">
+					<input type="text" value="{{ $row->address }}" name="adres" class="form-control">
 				</div>
 				<div class="panel panel-group">
 					<label>Plaats</label>
-					<input type="text" name="city" class="form-control">
+					<input type="text" value="{{ $row->city }}" name="woonplaats" class="form-control">
 				</div>
 				<div class="panel panel-group">
 					<label>Email</label>
-					<input type="text" name="email" class="form-control">
+					<input type="text" value="{{ $row->email }}" name="email" class="form-control">
 				</div>
 				<div class="panel panel-group">
 					<label>Telefoon nr</label>
-					<input type="text" name="phone" class="form-control">
+					<input type="text" value="{{ $row->phone_number }}" name="telefoon" class="form-control">
 				</div>
-				<input type="submit" value="Opslaan" class="btn btn-primary">
+				<input type="submit" value="Aanpassen" class="btn btn-primary">
+				
 			</div>
 		</div>
 	</form>

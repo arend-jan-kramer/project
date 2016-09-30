@@ -90,12 +90,6 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class='col-sm-3'>tafel</label>
-					<div class="col-sm-9">
-						<input class="form-control" name="tafel" value="{{ $tafel_nr->id }}">
-					</div>
-				</div>
 			</div>
 		</div>
 		<div class="modal-footer col-sm-12">

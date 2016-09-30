@@ -28,7 +28,7 @@
 				<td>{{ $bestel_menu->description }}</td>
 				<td>€ {{ $bestel_menu->price }}</td>
 				<td>
-					<a href="{{ 'editbestelmenu/'.$bestel_menu->id }}">Update</a> |
+					<a href="{{ 'editebestelmenu/'.$bestel_menu->id }}">Update</a> |
 					<a href="">Verwijderen</a>
 				</td>
 			</tr>

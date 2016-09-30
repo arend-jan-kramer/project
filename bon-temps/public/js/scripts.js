@@ -23,3 +23,10 @@ $(document).ready(function(){
     	dayNamesMin: [ "Zo", "Ma", "Di", "Woe", "Don", "Vrij", "Za" ]
     });
   });
+
+  $(document).ready(
+      function(){
+          var theValue = $('#visible_select').val();
+          $('option[value=' + theValue + ']')
+              .attr('selected',true);
+      });
