@@ -23,7 +23,7 @@ class dataController extends Controller
                 'adres'         => 'required',
                 'woonplaats'    => 'required',
                 'email'         => 'required',
-                'telefoon'      => 'required',
+                'telefoon'      => 'required|max:10',
                 'tijdstipu'     => 'required',
                 'tijdstipm'     => 'required',
                 'aantal'        => 'required',
@@ -50,8 +50,7 @@ class dataController extends Controller
                 'table_Date_time'   => $aankomst,
                 'reservation_time'  => 2,
                 'x_people'          => $post['aantal'],
-                'updated_at'        => $now,
-                'created_at'        => $now,
+                'reservation_menu'  => $post['menu'],
                 ]);
             if($id > 0)
             {

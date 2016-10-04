@@ -10,7 +10,8 @@
 
 @section('body')
 	<p class="alert-danger">{{ Session::get('message') }}</p>
-	<p><a class="text-success" href="">Nieuw</a></p>
+	<p><a class="text-success" href="/bestel-menu/nieuw">Nieuw</a></p>
+
 	<table class="table table-inverse table-bordered table-hover">
 		<thead class="thead-inverse">
 			<th>#</th>
@@ -28,7 +29,7 @@
 				<td>{{ $bestel_menu->description }}</td>
 				<td>€ {{ $bestel_menu->price }}</td>
 				<td>
-					<a href="{{ 'editebestelmenu/'.$bestel_menu->id }}">Update</a> |
+					<a href="{{ 'bestel-menu/edite/'.$bestel_menu->id }}">Update</a> |
 					<a href="">Verwijderen</a>
 				</td>
 			</tr>

@@ -4,6 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Links extends Model{
+class tbl_reservations extends Model{
 	protected $timestamps = false;
 }

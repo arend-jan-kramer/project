@@ -83,9 +83,9 @@
 				<div class="form-group">
 					<label class="col-sm-3" for="menu">Menu:</label>
 					<div class="col-sm-9">
-						<select class="selectpicker form-control" id="menuitems" data-live-search="true" data-style="btn-primary" title="Kies uw menu" data-width="100%">
+						<select name="menu" class="selectpicker form-control" id="menuitems" data-live-search="true" data-style="btn-primary" title="Kies uw menu" data-width="100%">
 							@foreach($orderlists as $orderlist)
-								<option value='{{$orderlist->id}}'>{{$orderlist->order_name.' € '.$orderlist->price}}</option>
+								<option value='{{$orderlist->order_name}}'>{{$orderlist->order_name.' € '.$orderlist->price}}</option>
 							@endforeach
 						</select>
 					</div>

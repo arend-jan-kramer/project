@@ -5,52 +5,130 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use DB;
+use App\tbl_orderlists;
 use Session;
 
-class bestelmenuController extends Controller
+class BestelMenuController extends Controller
 {
-	public function index()
-	{
-		$bestel_menus = DB::table('tbl_orderlists')->get();
-		return view('page.bestel-menu', compact('bestel_menus'));
-	}
-    public function aanpassen($id)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-    	$row = DB::table('tbl_orderlists')->where('id',$id)->first();
-    	return view('page.update-bestelmenu')->with('row',$row);
+        // alle data in een variable opslaan
+        $tbl_orderlists = tbl_orderlists::all();
+
+        // return variable in de view
+        return view('bestel-menu.index')->with('bestelmenus',$tbl_orderlists);
     }
 
-    public function update(Request $request)
-    {        
-        $post   = $request->all();
-        $v      = \Validator::make($request->all(),
-            [
-                'naam'          => 'required',
-                'description'   => 'required',
-                'price'    		=> 'required',
-                'visible'     => 'required',
-            ]);
-        if($v->fails())
-        {
-            return redirect()->back()->withErrors($v->errors());
-        }
-        else
-        {
-            $data = array(
-                'order_name'    => $post['naam'],
-                'description'   => $post['description'],
-                'price'         => $post['price'],
-                'visible'       => $post['visible'],
-                );
-            $id = DB::table('tbl_orderlists')->where('id',$post['id'])->update($data);
-            if($id > 0)
-            {
-                Session::flash('message', 'Menu aangepast');
-                return redirect('bestel-menu');
-            }
-        }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('bestel-menu.create');
+    }
 
-        return redirect()->back();
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // Validate the data
+        $this->validate($request, array(
+                'title'             => 'required',
+                'description'       => 'required',
+                'form_price'        => 'required'
+            ));
+
+        // Store in database
+        $bestel_menu = new tbl_orderlists;
+        $bestel_menu->order_name = $request->title;
+        $bestel_menu->description = $request->description;
+        $bestel_menu->price = $request->form_price;
+        $bestel_menu->visible = 1;
+
+        $bestel_menu->save();
+
+        // Redirect other page
+        return redirect()->route('bestel-menu.show', $bestel_menu->id);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $tbl_orderlists = tbl_orderlists::find($id);
+        return view('bestel-menu.show')->with('bestelmenus', $tbl_orderlists);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+        $tbl_orderlists = tbl_orderlists::find($id);
+        return view('bestel-menu.edit')->with('bestelmenus', $tbl_orderlists);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        // validate te data
+        $this->validate($request, array(
+                'order_name'   => 'required',
+                'description'  => 'required',
+                'price'        => 'required'
+            ));
+
+        // Save the data to database
+        $bestel_menu = tbl_orderlists::find($id);
+        $bestel_menu->order_name = $request->input('order_name');
+        $bestel_menu->description = $request->input('description');
+        $bestel_menu->price = $request->input('price');
+
+        $bestel_menu->save();
+
+        // set fash data with succes message
+        Session::flash('success', 'Opgeslagen in de database');
+
+        // redirect with flash data to bestel-menu.show
+        return redirect()->route('bestel-menu.show', $bestel_menu->id);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $bestel_menus = tbl_orderlists::find($id);
+        $bestel_menus->delete();
+
+        return redirect()->route('bestel-menu.index');
     }
 }

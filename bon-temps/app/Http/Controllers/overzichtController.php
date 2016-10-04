@@ -14,7 +14,7 @@ class overzichtController extends Controller
     public function index()
     {
     	$reservations = DB::table('tbl_reservations')
-    		->leftJoin('tbl_customers','tbl_reservations.customers_id','=','tbl_customers.id')
+    		// ->leftJoin('tbl_customers','tbl_reservations.customers_id','=','tbl_customers.id')
     		->paginate(10);
     	return View('page.overzicht', compact('reservations'));
     }
@@ -29,12 +29,3 @@ class overzichtController extends Controller
     	return View('page.zoeken',  compact('reservations'));
     }
 }
-// ->leftJoin('tbl_reservations','tbl_reservations.id','=','customers_id')
-
-
-
-// $naam = $request->all();
-// $reservations = DB::table('tbl_customers')
-// 	->where('name','=',$naam)
-// 	->first();
-// return $reservations->id;
