@@ -1,4 +1,4 @@
-@extends('layout.template1')
+@extends('layout.bon-temps')
 
 @section('title')
 	Update Bestel menu

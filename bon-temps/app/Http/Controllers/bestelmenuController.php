@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\tbl_orderlists;
+use Carbon\Carbon;
 use Session;
+
+use App\tbl_orderlists;
 
 class BestelMenuController extends Controller
 {
@@ -18,10 +20,10 @@ class BestelMenuController extends Controller
     public function index()
     {
         // alle data in een variable opslaan
-        $tbl_orderlists = tbl_orderlists::all();
+        $bestelmenus = tbl_orderlists::all();
 
         // return variable in de view
-        return view('bestel-menu.index')->with('bestelmenus',$tbl_orderlists);
+        return view('bestel-menu.index')->with(compact('bestelmenus'));
     }
 
     /**
@@ -42,6 +44,7 @@ class BestelMenuController extends Controller
      */
     public function store(Request $request)
     {
+        $dt = Carbon::now();
         // Validate the data
         $this->validate($request, array(
                 'title'             => 'required',
@@ -50,11 +53,13 @@ class BestelMenuController extends Controller
             ));
 
         // Store in database
-        $bestel_menu = new tbl_orderlists;
-        $bestel_menu->order_name = $request->title;
-        $bestel_menu->description = $request->description;
-        $bestel_menu->price = $request->form_price;
-        $bestel_menu->visible = 1;
+        $bestel_menu                = new tbl_orderlist;
+        $bestel_menu->order_name    = $request->title;
+        $bestel_menu->description   = $request->description;
+        $bestel_menu->price         = $request->form_price;
+        $bestel_menu->visible       = 1;
+        $bestel_menu->created_at    = $dt;
+        $bestel_menu->updated_at    = $dt;
 
         $bestel_menu->save();
 
@@ -104,10 +109,10 @@ class BestelMenuController extends Controller
             ));
 
         // Save the data to database
-        $bestel_menu = tbl_orderlists::find($id);
-        $bestel_menu->order_name = $request->input('order_name');
-        $bestel_menu->description = $request->input('description');
-        $bestel_menu->price = $request->input('price');
+        $bestel_menu                = tbl_orderlists::find($id);
+        $bestel_menu->order_name    = $request->input('order_name');
+        $bestel_menu->description   = $request->input('description');
+        $bestel_menu->price         = $request->input('price');
 
         $bestel_menu->save();
 

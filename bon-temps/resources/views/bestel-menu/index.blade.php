@@ -1,4 +1,4 @@
-@extends('layout.template1')
+@extends('layout.bon-temps')
 
 @section('title')
 	Menu
@@ -16,9 +16,10 @@
 		<thead class="thead-inverse">
 			<th>#</th>
 			<th>Naam</th>
-			<th>Description</th>
+			<th>Omschrijving</th>
 			<th>Prijs</th>
 			<th>Optie</th>
+			<th>Status</th>
 		</thead>
 		<tbody>
 		@foreach($bestelmenus as $bestel_menu)
@@ -26,10 +27,11 @@
 				<td>{{ $bestel_menu->id }}</td>
 				<td>{{ $bestel_menu->order_name }}</td>
 				<td>
-					{{ substr($bestel_menu->description, 0 ,10 ) }}
+					{{ substr($bestel_menu->description, 0 ,25 ) }}
 					{{ strlen($bestel_menu->description) > 50 ? '...' : ''  }}
 				</td>
 				<td>{{ $bestel_menu->price }}</td>
+				<td>{{ $bestel_menu->visible }}</td>
 				<td>
 					{!! Html::linkRoute('bestel-menu.show', 'Toon', array($bestel_menu->id)) !!}
 				</td>
