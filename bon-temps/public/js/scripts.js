@@ -23,13 +23,13 @@ $(function()
 			Default: 0,
 			The minimum hour allowed for all dates.
 		*/
-		hourMin: 6,
+		hourMin: 12,
 		/*
 			hourMax
 			Default: 23, 
 			The maximum hour allowed for all dates.
 		*/
-		hourMax: 12,
+		hourMax: 22,
 		/*
 			numberOfMonths
 			jQuery DatePicker option
@@ -51,7 +51,21 @@ $(function()
 
 		stepMinute: 15,
 
-		dateFormat: 'dd-mm-yy'
+		dateFormat: 'dd-mm-yy',
 
+		monthNames: ['Januari','Februari','Maart','April','Mei','Juni',
+			'Juli','Augustes','September','Oktober','November','December'],
+		dayNamesShort: ['Zo','Ma','Di','Woe','Do','Vr','Za'],
+		dayNamesMin: ['Zo','Ma','Di','Woe','Do','Vr','Za'],
+		timeText: 'Uur',
+		hourText: 'Uur',
+		minuteText: 'Min',
+		secondText: 'Sec',
+		millisecText: 'MilSec',
+		timezoneText: 'Nederlands',
+		currentText: 'Hoi',
+		closeText: 'Ok',
+		isRTL: false,
+		showMonthAfterYear: false
 	});
 });

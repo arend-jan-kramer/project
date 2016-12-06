@@ -19,7 +19,7 @@ class TblTable extends Migration
         });
         DB::table('tbl_table')->insert(
             array(
-                'number' => '1'
+                'number' => '20'
             )
         );
     }

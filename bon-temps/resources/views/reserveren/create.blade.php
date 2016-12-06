@@ -8,33 +8,35 @@
 	<h2>Reservering aanmaken</h2>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	{!! Form::open(array('route' => 'reserveren.store', 'data-parsley-validate' => '')) !!}
+	<div class="modal-header">
+		{{ Form::button('Nieuw klant', array('class' => 'btn btn-success', 'id' => 'expand')) }}
+	</div>
 	<div class="modal-body">
 		<div class="col-sm-6">
-			<div class="form-group">
-				{{ Form::label(null, 'Naam') }}
-				{{ Form::text('name', null, array('class' => 'form-control', 'id' =>'klant_naam', 'required' => '')) }}
-			</div>
-			
-			<div class="form-group">
-				{{ Form::label('address', 'Adres:') }}
-				{{ Form::text('address', null, array('class' => 'form-control')) }}
-			</div>
-
-			<div class="form-group">
-				{{ Form::label('city', 'Woonplaats') }}
-				{{ Form::text('city', null, array('class' => 'form-control')) }}
-			</div>
-
 			<div class="form-group">
 				{{ Form::label('email', 'Email') }}
 				{{ Form::email('email', null, array('class' => 'form-control', 'required' => '')) }}
 			</div>
+			<div class="form-group expand" hidden>
+				{{ Form::label(null, 'Naam') }}
+				{{ Form::text('name', null, array('class' => 'form-control', 'id' =>'klant_naam')) }}
+			</div>
+			
+			<div class="form-group expand" hidden>
+				{{ Form::label('address', 'Adres:') }}
+				{{ Form::text('address', null, array('class' => 'form-control')) }}
+			</div>
 
-			<div class="form-group">
+			<div class="form-group expand" hidden>
+				{{ Form::label('city', 'Woonplaats') }}
+				{{ Form::text('city', null, array('class' => 'form-control')) }}
+			</div>
+
+			<div class="form-group expand" hidden>
 				{{ Form::label('phone', 'Telefoon nummer') }}
-				{{ Form::text('phone_number', null, array('class' => 'form-control', 'required' => '', 'maxlength' => '10', 'minlength' => '10')) }}
+				{{ Form::text('phone_number', null, array('class' => 'form-control', 'maxlength' => '10', 'minlength' => '10')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label(null, 'Aantal personen') }}
@@ -45,7 +47,7 @@
 			<div class="form-group">
 				{{ Form::label(null, 'Datum en Tijd') }}
 				{{ Form::text('date', $nowTime, array('id' => 'datepicker', 'class' => 'form-control')) }}
-				{{ Form::hidden('tabl_nr', $table_id, array('id' => 'invisible_id')) }}
+				{{-- {{ Form::hidden('tabl_nr', $table_id, array('id' => 'invisible_id')) }} --}}
 			</div>
 			<div class="form-group">
 				<label>Selecteer menu</label>
@@ -88,6 +90,10 @@
 				$('#menu-description').val(data.description);
 				$('#menu-name').val(data.order_name);
 			});
+		});
+		$('#expand').on('click', function(){
+			console.log('hoi');
+			$('.expand').toggle();
 		});
 	</script>
 @endsection

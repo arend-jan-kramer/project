@@ -9,7 +9,7 @@
 	<a href="/klanten" class="btn btn-primary" title="Overzicht met alle klanten">Download</a>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	<p class="alert-danger">{{ Session::get('message') }}</p>
 	<div class="form-group">
 	{{ Form::text('keyword',null,array('class' => 'form-control', 'id' => 'search', 'placeholder' => 'Zoeken ...','autocomplete'=>'off')) }}
@@ -38,7 +38,17 @@
 		function overzicht(data){
 			var html_str = '';
 			var split_dateArray = new Array();
+			var text;
+			var tabel;
 			for (var i = 0; i< data.length; i++){
+				if(data[i].payed == 0){
+					text = 'Afrekenen';
+					table = '<td><a class="btn-success btn btn-xs btn-block" href="/overzicht/'+data[i].id+'/edit">ok</a>'+'</td><td>'
+					+'<a class="print btn-warning btn btn-xs btn-block" href="/overzicht/'+data[i].id+'">'+text+'</a>'+'</td>';
+				}else{
+					text = 'Print';
+					table = '<td colspan="2"><a class="print btn-warning btn btn-xs btn-block" href="/overzicht/'+data[i].id+'">'+text+'</a>'+'</td>';
+				}
 				split_dateArray = data[i].table_date_time.split(' ');
 				html_str += '<tr><td>'
 				+data[i].id+'</td><td>'
@@ -47,12 +57,15 @@
 				+split_dateArray[0]+'</td><td>'
 				+split_dateArray[1]+'</td><td>'
 				+data[i].x_people+'</td><td>'
-				+data[i].description+'</td><td>'
-				+'<a class="btn-success btn btn-xs btn-block" href="/overzicht/'+data[i].id+'/edit">ok</a>'+'</td><td>'
-				+'<a class="btn-warning btn btn-xs btn-block" href="/overzicht/'+data[i].id+'">Afrekenen</a>'+'</td>';
+				+data[i].description+'</td>'
+				+table;
 			}
 			html_str += '</tr>';
 			$('#searchresults').html(html_str);
+			
+			$('a.print').on('click', function(){
+				$(this).text('Print');
+			});
 		}
 		$('#search').on('keyup', function (){
 		    var keyword = $(this).val();
@@ -66,7 +79,6 @@
 			var keyword = $(this).val();
 			$.get('/search', function(data){
 		    	//success data
-		    	console.log(data);
 		    	overzicht(data);
 		    });
 		});

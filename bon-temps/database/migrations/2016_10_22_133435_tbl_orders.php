@@ -20,7 +20,7 @@ class TblOrders extends Migration
             $table->longText('description');
             $table->string('x_drinks', 10);
             $table->string('price', 10);
-
+            $table->string('payed', 1);
             //$table->foreign('reservation_id')->references('id')->on('tbl_reservations');
         });
     }

@@ -8,7 +8,7 @@
 	<h2>Overzicht bestel menu</h2>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	<p class="alert-danger">{{ Session::get('message') }}</p>
 	<p>{!! Html::linkRoute('bestel-menu.create', 'Nieuw') !!}</p>
 

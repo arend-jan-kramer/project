@@ -8,10 +8,10 @@
 	<h2>Toon bestel menu: {{ $bestelmenus->order_name }}</h2>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	<p class="alert-danger">{{ Session::get('message') }}</p>
-	<p>{!! Html::linkRoute('bestel-menu.create', 'Nieuw') !!}
-	{!! Html::linkRoute('bestel-menu.index', 'Overzicht') !!}</p>
+	{{-- <p>{!! Html::linkRoute('bestel-menu.create', 'Nieuw') !!} --}}
+	{!! Html::linkRoute('bestel-menu.index', 'Terug') !!}</p>
 
 	<table class="table table-inverse table-bordered table-hover">
 		<thead class="thead-inverse">
@@ -19,7 +19,7 @@
 			<th>Naam</th>
 			<th>Omschrijving</th>
 			<th>Prijs</th>
-			<th>laatste aanpassing</th>
+			{{-- <th>laatste aanpassing</th> --}}
 			<th colspan="2" >Optie</th>
 		</thead>
 		<tbody>
@@ -28,7 +28,7 @@
 				<td>{{ $bestelmenus->order_name }}</td>
 				<td>{{ $bestelmenus->description }}</td>
 				<td>€ {{ $bestelmenus->price }}</td>
-				<td>{{ date('l d F Y, H:i', strtotime($bestelmenus->updated_at)) }}</td>
+				{{-- <td>{{ date('l d F Y, H:i', strtotime($bestelmenus->updated_at)) }}</td> --}}
 				<td>
 					{!! Html::linkRoute('bestel-menu.edit', 'Aanpassen', array($bestelmenus->id), array('class' => 'btn btn-success btn-block') ) !!}
 				</td>

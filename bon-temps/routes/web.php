@@ -16,10 +16,11 @@
 Route::resource('overzicht', 'OverzichtController',['except' => ['create']]);
 Route::resource('reserveren', 'ReserverenController');
 Route::resource('bestel-menu', 'BestelMenuController');
-Route::get('/', 'PagesController@getMenu');
 Route::get('/get_menu', 'ReserverenController@check');
 Route::get('/search', 'OverzichtController@search');
 Route::get('/klanten', 'OverzichtController@download');
+Route::get('/getReserveringen', 'PagesController@getReserveringen');
+Route::get('/', 'PagesController@index');
 
 Route::get('test/datum={datum}&tijd={time}&x={x_people}', 'OverzichtController@test');
 

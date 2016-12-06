@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use Response;
 use Input;
+use PDF;
+
+// use Response, Input, PDF, Carbon\Carbon, App\tbl_reservations, App\tbl_orders, App\tbl_customers;
 use Carbon\Carbon;
 use App\Http\Requests;
 
@@ -55,30 +58,23 @@ class OverzichtController extends Controller
     public function show($id)
     {
         // Download de PDF file
+        $reservations = tbl_orders::find($id);
+
+        $reservations->payed = 1;
+        $reservations->save();
+
+        /*
+         * pass data through to invoice view
+         */
         $table = tbl_orders::
         join('tbl_reservations','reservation_id','tbl_reservations.id')
         ->join('tbl_customers','customers_id','tbl_customers.id')
         ->select('tbl_orders.*','tbl_customers.*','tbl_reservations.*')
         ->find($id);
-
-        $filename = "bon.pdf";
-        $handle = fopen($filename, 'w+');
-        fputcsv($handle, array('id', 'naam', 'adres', 'plaats', 'email', 'telefoon nummer'));
-
-        foreach($table as $row) {
-            fputcsv($handle, array($row['id'], $row['name'], $row['address'], $row['city'], $row['email'], $row['phone_number']));
-        }
-
-        fclose($handle);
-
-        $headers = array(
-            'Content-Type' => 'text/csv',
-        );
-
-        return Response()->download($filename, 'bon.pdf', $headers);
-
-        // return Response::json($reservations);
-        // return view('overzicht.show')->with(compact('reservations'));
+        //end data
+        $pdf = PDF::loadView('pdf.index', ['table' => $table]);
+        return $pdf->stream('bestelling'.$table->reservation_id.'.pdf');
+        // return $pdf->download('bestelling'.$table->reservation_id.'.pdf');
     }
 
     /**
@@ -135,14 +131,18 @@ class OverzichtController extends Controller
      */
     public function search(){
         $value = Input::get('keyword');
-        $today = Carbon::today()->toDateString();
+        // $today = Carbon::today()->toDateString();
+        $today = Carbon::now();
+        $today->subHours(2);
+        $today->toDateString();
         $reservations = tbl_orders::
         join('tbl_reservations','reservation_id','tbl_reservations.id')
         ->join('tbl_customers','customers_id','tbl_customers.id')
         ->select('tbl_orders.*','tbl_customers.*','tbl_reservations.*')
         ->where([
-            ['name','LIKE','%'.$value.'%'],
-            ['table_date_time','>',$today]
+            ['name','LIKE','%'.$value.'%']
+            ,['table_date_time','>',$today]
+            // ,['payed','0']
         ])
         ->get();
         return Response::json($reservations);
@@ -180,7 +180,7 @@ class OverzichtController extends Controller
     }
 
     public function download(){
-        $table = tbl_customers::all();
+        $table = ztbl_customers::all();
         $filename = "klanten.csv";
         $handle = fopen($filename, 'w+');
         fputcsv($handle, array('id', 'naam', 'adres', 'plaats', 'email', 'telefoon nummer'));

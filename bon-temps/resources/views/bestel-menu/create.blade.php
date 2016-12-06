@@ -8,7 +8,7 @@
 	<h2>Maak</h2>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	{!! Form::open(array('route' => 'bestel-menu.store')) !!}
 		<div class="form-group">
 		{{ Form::label('title', 'Menu titel') }}

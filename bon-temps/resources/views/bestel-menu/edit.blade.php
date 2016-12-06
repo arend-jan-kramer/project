@@ -8,7 +8,7 @@
 	<h2>Aanpassen</h2>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	{!! Form::model($bestelmenus, ['route' => ['bestel-menu.update', $bestelmenus->id], 'method' => 'PUT']) !!}
 		{{ Form::text('order_name', null, array('class' => 'form-control')) }}
 		{{ Form::textarea('description', null, array('class' => 'form-control')) }}

@@ -27,9 +27,8 @@ class ReserverenController extends Controller
     {
         $nowTime = Carbon::now();
         $nowTime->second = 0;
-        $table_id = 1;
         $orderlists = tbl_orderlists::all();
-        return view('reserveren.create')->with(compact('nowTime','table_id','orderlists'));
+        return view('reserveren.create')->with(compact('nowTime','orderlists'));
     }
 
     /**
@@ -51,73 +50,110 @@ class ReserverenController extends Controller
      */
     public function store(Request $request)
     {
-        // tafel nummers
-        $x_tafels = ceil($request->x_people / 4);
-        // $tafels= array();
-        // $x_tafels += $table_id;
-        // for($i = $table_id; $i< $x_tafels; $i++){
-        //     array_push($tafels, $i);
-        // }
-        // $tafels = implode(',', $tafels);
-
-        // Controleren gegevens
-        $this->validate($request, array(
-                'name'          => 'required',
-                'address'       => 'required',
-                'city'          => 'required',
-                'email'         => 'required',
-                'phone_number'  => 'required|max:10',
-                'x_people'      => 'required'
-            ));
-
-        // Nieuwe gebruiker toevoegen in de database
-        $customers                = new tbl_customers;
-        $customers->name          = $request->name;
-        $customers->address       = $request->address;
-        $customers->city          = $request->city;
-        $customers->email         = $request->email;
-        $customers->phone_number  = $request->phone_number;
-        // $customers->id            = 1;// moet weg
-
-        // Gebruiker opslaan
-        $customers->save();
-
-        // datum=2016-10-31&tijd=16:46&x=81
-
-        // Een reservering aanmaken in de database
+        //Maak datum check
         $voorAankomst = carbon::createFromFormat('Y-m-d H:i', date('Y-m-d H:i',strtotime($request->date)));
         $aankomstTijd = carbon::createFromFormat('Y-m-d H:i', date('Y-m-d H:i',strtotime($request->date)));
         $vertrekTijd = carbon::createFromFormat('Y-m-d H:i', date('Y-m-d H:i',strtotime($request->date)));
         $voorAankomst->subHours(2);
 
-        $reservations                   = new tbl_reservations;
-        $reservations->customers_id     = $customers->id;
-        $reservations->table_id         = $this->tafelNummer($voorAankomst, $vertrekTijd);
-        $reservations->x_table          = $x_tafels;
-        $reservations->table_date_time  = $aankomstTijd;
-        $reservations->reservation_time = 2;
-        $reservations->x_people         = $request->x_people;
-        // $reservations->id               = 1;// moet weg
-
-        // Reservering opslaan
-        if($reservations->table_id  == null){
-            Session::flash('warning', 'Tafels bezet kies een ander tijdstip');
-            return redirect()->route('reserveren.index');
+        // tafel nummers
+        $tafles = tbl_table::all()->first();
+        
+        $check = tbl_reservations::whereBetween('table_date_time', array($aankomstTijd, $vertrekTijd))
+        ->orderBy('table_id','desc')
+        ->first();
+        if($check == null){
+            $x_tafels = $tafles->number - ceil($request->x_people / 4);
         }else{
-            $reservations->save();
+            $x_tafels = $check->x_table - ceil($request->x_people / 4);
         }
-        $reservations->save();
 
-        $order                  = new tbl_orders;
-        $order->reservation_id  = $reservations->id;
-        $order->order_name      = $request->menu_name;
-        $order->description     = $request->description;
-        $order->x_drinks        = $request->x_people;
-        $order->price           = $request->price;
-        $order->payed           = 0;
 
-        // Bestelling opslaan
-        $order->save();
+        // check of gebruiker bestaat
+        $nieuwGebruiker = tbl_customers::where('email','LIKE',$request->email)->first();
+        
+        if($nieuwGebruiker->email == $request->email){
+            $updateGebruiker = tbl_customers::where('email','LIKE',$request->email)->first();
+
+            // Een reservering aanmaken in de database
+            $reservations                   = new tbl_reservations;
+            $reservations->customers_id     = $updateGebruiker->id;
+            $reservations->table_id         = $this->tafelNummer($voorAankomst, $vertrekTijd);
+            $reservations->x_table          = $x_tafels;
+            $reservations->table_date_time  = $aankomstTijd;
+            $reservations->reservation_time = 2;
+            $reservations->x_people         = $request->x_people;
+            // $reservations->id               = 1;// moet weg
+
+            // Reservering opslaan
+            if($reservations->table_id  == null){
+                Session::flash('warning', 'Tafels bezet kies een ander tijdstip');
+                return redirect()->route('reserveren.index');
+            }else{
+                $reservations->save();
+            }
+            $reservations->save();
+
+            $order                  = new tbl_orders;
+            $order->reservation_id  = $reservations->id;
+            $order->order_name      = $request->menu_name;
+            $order->description     = $request->description;
+            $order->x_drinks        = $request->x_people;
+            $order->price           = $request->price;
+            $order->payed           = 0;
+
+            // Bestelling opslaan
+            $order->save();
+        }else{
+            // // Controleren gegevens
+            // $this->validate($request, array(
+            //         'email'         => 'required|email|unique:tbl_customers,email',
+            //         'phone_number'  => 'max:10',
+            //         'x_people'      => 'required'
+            //     ));
+
+            // Nieuwe gebruiker toevoegen in de database
+            $customers                = new tbl_customers;
+            $customers->name          = $request->name;
+            $customers->address       = $request->address;
+            $customers->city          = $request->city;
+            $customers->email         = $request->email;
+            $customers->phone_number  = $request->phone_number;
+            // $customers->id            = 1;// moet weg
+
+            // Gebruiker opslaan
+            $customers->save();
+
+            // Een reservering aanmaken in de database
+            $reservations                   = new tbl_reservations;
+            $reservations->customers_id     = $customers->id;
+            $reservations->table_id         = $this->tafelNummer($voorAankomst, $vertrekTijd);
+            $reservations->x_table          = $x_tafels;
+            $reservations->table_date_time  = $aankomstTijd;
+            $reservations->reservation_time = 2;
+            $reservations->x_people         = $request->x_people;
+            // $reservations->id               = 1;// moet weg
+
+            // Reservering opslaan
+            if($reservations->table_id  == null){
+                Session::flash('warning', 'Tafels bezet kies een ander tijdstip');
+                return redirect()->route('reserveren.index');
+            }else{
+                $reservations->save();
+            }
+            $reservations->save();
+
+            $order                  = new tbl_orders;
+            $order->reservation_id  = $reservations->id;
+            $order->order_name      = $request->menu_name;
+            $order->description     = $request->description;
+            $order->x_drinks        = $request->x_people;
+            $order->price           = $request->price;
+            $order->payed           = 0;
+
+            // Bestelling opslaan
+            $order->save();
+        }
 
         // return Response::json(compact('customers','reservations','order'));
 
@@ -192,9 +228,9 @@ class ReserverenController extends Controller
         
         $tafles = tbl_table::all()->first();
 
-        var_dump($tafels);exit;
+        // var_dump($tafels);exit;
         // Geef een tafel nummer mee
-        if($aantal >= $tafles){
+        if($aantal >= $tafles->number){
             // Bezet
             return;
         }if($aantal == 0){

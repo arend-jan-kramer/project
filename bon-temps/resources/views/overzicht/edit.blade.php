@@ -8,7 +8,7 @@
 	<h2>Reservering aanpassen</h2>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	{!! Form::model($reservations, ['route' => ['overzicht.update', $reservations->id], 'method' => 'PUT' ]) !!}
 		<div class="form-group">
 			{{ Form::label(null, 'Naam') }}

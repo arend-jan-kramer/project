@@ -8,7 +8,7 @@
 	<h2>Reservering bekijken</h2>
 @endsection
 
-@section('body')
+@section('inner_wrapper')
 	<div class="row">
 		<div class="col-sm-9">
 			<ul>

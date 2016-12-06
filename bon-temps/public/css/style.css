@@ -8,9 +8,9 @@ html, body {
     margin: 0;
 }
 a.title{
+    color: #636b6f;
     font-family: 'Raleway', sans-serif;
     font-weight: 100;
-    color: #636b6f;
 }
 .full-height {
     height: 100vh;
@@ -35,9 +35,11 @@ a.title{
 .content {
     text-align: center;
 }
+
 .navbar .title {
   font-size:  40px;
 }
+
 .title {
     font-size: 94px;
 }
@@ -92,17 +94,102 @@ textarea.parsley-error {
 }
 
 /* Timepicker */
-.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-.ui-timepicker-div dl { text-align: left; }
-.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
-.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
-.ui-timepicker-div td { font-size: 90%; }
-.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+.ui-timepicker-div .ui-widget-header { 
+  margin-bottom: 8px; 
+}
 
-.ui-timepicker-rtl{ direction: rtl; }
-.ui-timepicker-rtl dl { text-align: right; }
-.ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+.ui-timepicker-div dl { 
+  text-align: left; 
+}
 
-body > .container{
-  margin-bottom:  80px;
+.ui-timepicker-div dl dt { 
+  height: 25px; 
+  margin-bottom: -25px; 
+}
+
+.ui-timepicker-div dl dd { 
+  margin: 0 10px 10px 65px; 
+}
+
+.ui-timepicker-div td { 
+  font-size: 90%; 
+}
+
+.ui-tpicker-grid-label { 
+  background: none; 
+  border: none; 
+  margin: 0; 
+  padding: 0; 
+}
+
+.ui-timepicker-rtl{ 
+  direction: rtl; 
+}
+
+.ui-timepicker-rtl dl { 
+  text-align: right; 
+}
+
+.ui-timepicker-rtl dl dd { 
+  margin: 0 65px 10px 10px; 
+}
+
+body > .container{ 
+  margin-bottom: 80px; 
+}
+body.home .container{ 
+  margin-bottom: 0; 
+}
+
+.overzicht .tafel{ 
+  background: #E0E0E0; 
+  border-radius: 0px 10px 10px 0; 
+  color: #FF0000; 
+  display: block; 
+  padding: 5px; 
+}
+.overzicht .tafel p{ 
+  margin: 0; 
+}
+.overzicht > span{ 
+  position: absolute; 
+}
+.glyphicon{
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  user-select: none;          /* Likely future */ 
+}
+.toggler{ 
+  margin-top: 40px; 
+  max-width: 500px;
+}
+.overzicht{ 
+  left: 0; 
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.large-font{ 
+  font-size: 35px; 
+}
+.reservations{ 
+  display: none; 
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+    width: 12px;
+    background: #222;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    background: #FFF;
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }

@@ -5,16 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\tbl_orders;
+use App\tbl_table;
 
+use Carbon\Carbon;
 use DB;
+use Response;
 
 class PagesController extends Controller
 {
-
-    public function getMenu()
+    public function getReserveringen()
     {
-        $menus = DB::table('links')->get();
-        return View('page.welcome', compact('menus'));
+        $todayNow = Carbon::now();
+        $todayNow->subHours(2);
+        $todayNow->toDateString();
+        $todaySoon = Carbon::now();
+        $todaySoon->toDateString();
+
+        $reservations = tbl_orders::
+        join('tbl_reservations','reservation_id','tbl_reservations.id')
+        ->join('tbl_customers','customers_id','tbl_customers.id')
+        ->whereBetween('table_date_time', array($todayNow, $todaySoon))
+        ->where('payed','=','0')
+        ->get();
+
+        return Response::json($reservations);
     }
 
     /**
@@ -24,7 +39,8 @@ class PagesController extends Controller
      */
     public function index()
     {
-        //
+        $menus = DB::table('links')->get();
+        return View('page.welcome', compact('menus'));
     }
 
     /**
