@@ -133,8 +133,8 @@ class OverzichtController extends Controller
         $value = Input::get('keyword');
         // $today = Carbon::today()->toDateString();
         $today = Carbon::now();
-        $today->subHours(2);
-        $today->toDateString();
+        $today = $today->subHours(2);
+        $today = $today->toDateTimeString();
         $reservations = tbl_orders::
         join('tbl_reservations','reservation_id','tbl_reservations.id')
         ->join('tbl_customers','customers_id','tbl_customers.id')
@@ -142,7 +142,7 @@ class OverzichtController extends Controller
         ->where([
             ['name','LIKE','%'.$value.'%']
             ,['table_date_time','>',$today]
-            // ,['payed','0']
+            ,['payed','0']
         ])
         ->get();
         return Response::json($reservations);
@@ -180,7 +180,9 @@ class OverzichtController extends Controller
     }
 
     public function download(){
-        $table = ztbl_customers::all();
+        $today = carbon::now();
+        $today = $today->toDateString();
+        $table = tbl_customers::all();
         $filename = "klanten.csv";
         $handle = fopen($filename, 'w+');
         fputcsv($handle, array('id', 'naam', 'adres', 'plaats', 'email', 'telefoon nummer'));
@@ -195,6 +197,6 @@ class OverzichtController extends Controller
             'Content-Type' => 'text/csv',
         );
 
-        return Response::download($filename, 'klanten.csv', $headers);
+        return Response::download($filename, $today.'_klanten.csv', $headers);
     }
 }

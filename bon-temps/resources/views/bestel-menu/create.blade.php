@@ -9,7 +9,7 @@
 @endsection
 
 @section('inner_wrapper')
-	{!! Form::open(array('route' => 'bestel-menu.store')) !!}
+	{!! Form::open(array('route' => 'bestel-menu.store', 'files' => true)) !!}
 		<div class="form-group">
 		{{ Form::label('title', 'Menu titel') }}
 		{{ Form::text('title', null, array('class' => 'form-control') )}}
@@ -24,6 +24,9 @@
 		<div class="form-group">
 		{{ Form::label('price', 'Menu prijs') }}
 		{{ Form::text('form_price', null, array('class' => 'form-control')) }}
+		</div>
+		<div class="form-group">
+		{!! Form::file('image', array('accept'=> 'image/*')) !!}
 		</div>
 		<div class="form-group">
 		{{ Form::submit('Nieuw menu aanmaken', array('class' => 'btn btn-success btn-lg btn-block')) }}

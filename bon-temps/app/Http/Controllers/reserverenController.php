@@ -25,9 +25,25 @@ class ReserverenController extends Controller
      */
     public function index()
     {
-        $nowTime = Carbon::now();
-        $nowTime->second = 0;
-        $orderlists = tbl_orderlists::all();
+        // $minutes = date('i', strtotime($timestring));
+        // return $minutes - ($minutes % 15);
+
+        $nowTime = Carbon::now()->second(0);
+        switch($nowTime->minute){
+            case($nowTime->minute < 15):
+            $nowTime->minute = 15;
+            break;
+            case($nowTime->minute < 30):
+            $nowTime->minute = 30;
+            break;
+            case($nowTime->minute < 45):
+            $nowTime->minute = 45;
+            break;
+            default:
+            $nowTime->minute = 0;
+        }
+        // $nowTime->minute = $nowTime->minute - ($nowTime->minute % 15);
+        $orderlists = tbl_orderlists::where('visible', 1)->get();
         return view('reserveren.create')->with(compact('nowTime','orderlists'));
     }
 

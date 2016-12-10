@@ -18,23 +18,26 @@ class TblOrderlists extends Migration
             $table->string('order_name', 35);
             $table->longText('description');
             $table->string('price', 10);
-            $table->string('visible', 1);
+            $table->boolean('visible');
+            $table->longText('image_url');
             $table->timestamps();
         });
 
         DB::table('tbl_orderlists')->insert(
             array(
                 array(
-                    'order_name' => 'hoi',
-                    'description' => 'testkipje',
-                    'price' => '12.00',
-                    'visible' => '1'
+                    'order_name' => 'Snack',
+                    'description' => 'Patat, Frikandel/Kroket/kaas souflé, Mayo/Curry/Pinda',
+                    'price' => '4.50',
+                    'visible' => true,
+                    'image_url' => 'uploads\included\IMG_0947.jpg'
                 ),
                 array(
-                    'order_name' => 'Weekend',
-                    'description' => 'Friet,Hamburger,Frikandel,Mayo',
-                    'price' => '7.95',
-                    'visible' => '1'
+                    'order_name' => 'Chinees',
+                    'description' => 'Rijst, Bami, Koelokaai, nasi, Kroepoek'
+                    'price' => '14.95',
+                    'visible' => true,
+                    'image_url' => 'uploads\included\IMG_0947.jpg'
                 )
             )
         );

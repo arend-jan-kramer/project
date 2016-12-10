@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Carbon\Carbon;
 use Session;
+use Image;
 
 use App\tbl_orderlists;
 
@@ -52,15 +53,25 @@ class BestelMenuController extends Controller
                 'form_price'        => 'required'
             ));
 
+
         // Store in database
-        $bestel_menu                = new tbl_orderlist;
+        $destinationPath = 'uploads';
+        $image = $request->file('image');
+        $imageUrl = $image->move($destinationPath,$image->getClientOriginalName());
+
+        $img = Image::make($destinationPath.'/'.$image->getClientOriginalName());
+        $img->resize(70, 70);
+        $img->save($destinationPath.'/'.$image->getClientOriginalName());
+
+        // var_dump($request);exit;
+        $bestel_menu                = new tbl_orderlists;
         $bestel_menu->order_name    = $request->title;
         $bestel_menu->description   = $request->description;
         $bestel_menu->price         = $request->form_price;
-        $bestel_menu->visible       = 1;
+        $bestel_menu->visible       = true;
+        $bestel_menu->image_url     = $imageUrl;
         $bestel_menu->created_at    = $dt;
         $bestel_menu->updated_at    = $dt;
-
         $bestel_menu->save();
 
         // Redirect other page
@@ -108,11 +119,17 @@ class BestelMenuController extends Controller
                 'price'        => 'required'
             ));
 
+        if($request->input('zichtbaar') == null){
+            $visible = 0;
+        }else{
+            $visible = 1;
+        }
         // Save the data to database
         $bestel_menu                = tbl_orderlists::find($id);
         $bestel_menu->order_name    = $request->input('order_name');
         $bestel_menu->description   = $request->input('description');
         $bestel_menu->price         = $request->input('price');
+        $bestel_menu->visible       = $visible;
 
         $bestel_menu->save();
 
@@ -132,7 +149,7 @@ class BestelMenuController extends Controller
     public function destroy($id)
     {
         $bestel_menus = tbl_orderlists::find($id);
-        $bestel_menus->delete();
+        $bestel_menus = $bestel_menus->delete();
 
         return redirect()->route('bestel-menu.index');
     }
